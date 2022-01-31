@@ -12,6 +12,10 @@ NAME 	= 	pbrain-gomoku-ai
 all: $(NAME)
 
 $(NAME):
+	cp main.py $(NAME)
+	chmod +x $(NAME)
+
+buildpy:
 	pyinstaller --onefile main.py --name $(NAME)
 	cp dist/$(NAME) ./
 
