@@ -6,7 +6,10 @@
 ## main
 ##
 
+from re import M
 import sys
+
+from IABrain import IABrain
 
 def coucou():
     print("coucou")
@@ -14,15 +17,12 @@ def coucou():
 def aurevoir():
     print("aurevoir")
 
-piskvorkCmd = {
-    "1\n": coucou,
-    "2\n": aurevoir,
-}
-
 def main():
+    myIa = IABrain()
     for line in sys.stdin:
+        line = line.rstrip("\n")
         try:
-            piskvorkCmd[line]()
+            myIa.processingData(line)
         except:
             print("command invalid")
         
