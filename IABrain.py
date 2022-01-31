@@ -7,10 +7,16 @@
 ##
 
 from ast import arg
+from inspect import _void
 from tokenize import String
 
 
 class IABrain:
+
+    iaName = "Randodo"
+    version = "0.0.1"
+    author = "4nton1n_l3_bo22"
+    country = "FRANCE"
 
     map = []
 
@@ -26,15 +32,22 @@ class IABrain:
         for i in self.map:
             print(i)
 
+    def cmdAbout(self):
+        print('name=\"{}\", version=\"{}\", author=\"{}\", country=\"{}\"'.format(self.iaName,
+                                                                                    self.version,
+                                                                                    self.author,
+                                                                                    self.country))
+
 
     piskvorkCmd = {
         "BEGIN": cmdBegin,
         "END": cmdEnd,
-        "START": cmdStart
+        "START": cmdStart,
+        "ABOUT": cmdAbout,
     }
 
-    def __init__(self):
-        print('i m alive !!')
+    # def __init__(self):
+    #     print("I'm alive !!")
 
     def processingData(self, cmd):
         list = cmd.split()
