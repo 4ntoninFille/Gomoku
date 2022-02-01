@@ -12,13 +12,6 @@ import re
 
 class IABrain:
 
-    iaName = "Randodo"
-    version = "0.0.1"
-    author = "4nton1n_l3_bo22"
-    country = "FRANCE"
-
-    map = []
-
     def computeSolution(self):
         size = len(self.map[0])
         rx = random.randint(0, size)
@@ -55,6 +48,10 @@ class IABrain:
     def cmdTurn(self, x, y):
         self.map[int(x)][int(y)] = 2
         self.computeSolution(self)
+    
+    def cmdBoard(self, list):
+        for i in list:
+            print()
 
 
     piskvorkCmd = {
@@ -63,10 +60,16 @@ class IABrain:
         "START": cmdStart,
         "ABOUT": cmdAbout,
         "TURN": cmdTurn,
+        "BOARD": cmdBoard,
     }
 
-    # def __init__(self):
-    #     print("I'm alive !!")
+    def __init__(self):
+        print("I'm alive !!")
+        self.map = []
+        self.iaName = "Randodo"
+        self.version = "0.0.1"
+        self.author = "4nton1n_l3_bo22"
+        self.country = "FRANCE"
 
     def processingData(self, cmd):
         list = re.findall(r"[\w']+", cmd)
