@@ -18,10 +18,8 @@ class Brain:
         self.map = []
 
     def computeSolution(self) -> None:
-        print("tetw")
         size = len(self.map[0])
-        print(size)
-        
+
         rx = randint(0, size - 1)
         ry = randint(0, size - 1)
 

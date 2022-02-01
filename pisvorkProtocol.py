@@ -42,18 +42,14 @@ class piskvorkProtocol(Brain):
         self.brain.computeSolution()
     
     def cmdBoard(self):
-        print("test")
         for line in sys.stdin:
             line = line.rstrip("\n")
             if line == "DONE":
-                print("soirt")
                 break
 
             coor = re.findall(r"[\w']+", line)
             self.brain.map[int(coor[0])][int(coor[1])] = int(coor[2])
-        print("lol")
         self.brain.computeSolution()
-        print("aiiiiiie")
 
 
     piskvorkCmd = {
