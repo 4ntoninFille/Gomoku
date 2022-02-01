@@ -24,7 +24,7 @@ def main():
         try:
             myIa.processingData(line)
         except:
-            print("command invalid")
+            print("command invalid:", sys.exc_info()[0])
         
     return 0
 

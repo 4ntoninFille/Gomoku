@@ -6,9 +6,8 @@
 ## brainIA
 ##
 
-from ast import arg
-from inspect import _void
-from tokenize import String
+import random
+import re
 
 
 class IABrain:
@@ -20,11 +19,23 @@ class IABrain:
 
     map = []
 
+    def computeSolution(self):
+        size = len(self.map[0])
+        rx = random.randint(0, size)
+        ry = random.randint(0, size)
+
+        self.map[rx][ry] = 1
+
+        print("{}, {}".format(rx, ry))
+
+
     def cmdBegin(self):
-        print ("begin")
+        self.computeSolution();
+
 
     def cmdEnd(self):
         print("end")
+
 
     def cmdStart(self, size):
         print("OK - everything is good")
@@ -32,11 +43,18 @@ class IABrain:
         for i in self.map:
             print(i)
 
+
     def cmdAbout(self):
-        print('name=\"{}\", version=\"{}\", author=\"{}\", country=\"{}\"'.format(self.iaName,
-                                                                                    self.version,
-                                                                                    self.author,
-                                                                                    self.country))
+        print('name=\"{}\", version=\"{}\", author=\"{}\", country=\"{}\"'\
+            .format(self.iaName,
+                    self.version,
+                    self.author,
+                    self.country))
+
+
+    def cmdTurn(self, x, y):
+        self.map[int(x)][int(y)] = 2
+        self.computeSolution(self)
 
 
     piskvorkCmd = {
@@ -44,13 +62,15 @@ class IABrain:
         "END": cmdEnd,
         "START": cmdStart,
         "ABOUT": cmdAbout,
+        "TURN": cmdTurn,
     }
 
     # def __init__(self):
     #     print("I'm alive !!")
 
     def processingData(self, cmd):
-        list = cmd.split()
+        list = re.findall(r"[\w']+", cmd)
+        print(list)
         args = list[1:]
         args.insert(0, self)
         self.piskvorkCmd[list[0]](*args)
