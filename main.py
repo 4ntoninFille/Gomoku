@@ -9,7 +9,7 @@
 from re import M
 import sys
 
-from IABrain import IABrain
+from pisvorkProtocol import piskvorkProtocol
 
 def coucou():
     print("coucou")
@@ -18,7 +18,7 @@ def aurevoir():
     print("aurevoir")
 
 def main():
-    myIa = IABrain()
+    myIa = piskvorkProtocol()
     for line in sys.stdin:
         line = line.rstrip("\n")
         try:
