@@ -14,8 +14,9 @@ class Brain:
         self.version = "0.0.1"
         self.author = "4nton1n_l3_bo22"
         self.country = "FRANCE"
+        self.map = []
 
-    def computeSolution(self):
+    def computeSolution(self) -> None:
         size = len(self.map[0])
         rx = random.randint(0, size)
         ry = random.randint(0, size)

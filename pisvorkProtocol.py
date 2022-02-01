@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 ##
 ## EPITECH PROJECT, 2022
 ## B-AIA-500-NCE-5-1-gomoku-antonin.fille
@@ -14,10 +15,9 @@ class piskvorkProtocol(Brain):
     def __init__(self):
         print("I'm alive !!")
         self.brain = Brain()
-        self.map = []
 
     def cmdBegin(self):
-        self.computeSolution();
+        self.brain.computeSolution();
 
 
     def cmdEnd(self):
@@ -26,8 +26,8 @@ class piskvorkProtocol(Brain):
 
     def cmdStart(self, size):
         print("OK - everything is good")
-        self.map = [[0] * int(size)] * int(size)
-        for i in self.map:
+        self.brain.map = [[0] * int(size)] * int(size)
+        for i in self.brain.map:
             print(i)
 
 
@@ -40,20 +40,20 @@ class piskvorkProtocol(Brain):
 
 
     def cmdTurn(self, x, y):
-        self.map[int(x)][int(y)] = 2
-        self.computeSolution(self)
+        self.brain.map[int(x)][int(y)] = 2
+        self.brain.computeSolution(self)
     
     def cmdBoard(self):
         for line in sys.stdin:
             line = line.rstrip("\n")
             coor = re.findall(r"[\w']+", line)
 
-            self.map[coor[0]][coor[1]] = coor[2]
+            self.brain.map[coor[0]][coor[1]] = coor[2]
 
             if line == "DONE":
                 break
 
-        self.computeSolution()
+        self.brain.computeSolution()
 
 
     piskvorkCmd = {
