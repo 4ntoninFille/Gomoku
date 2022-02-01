@@ -6,10 +6,11 @@
 ## brainIA
 ##
 
-from random import random
+from random import randint
 
 class Brain:
     def __init__(self) -> None:
+        print("MESSAGE I'm alive !!")
         self.iaName = "Randodo"
         self.version = "0.0.1"
         self.author = "4nton1n_l3_bo22"
@@ -17,10 +18,19 @@ class Brain:
         self.map = []
 
     def computeSolution(self) -> None:
+        print("tetw")
         size = len(self.map[0])
-        rx = random.randint(0, size)
-        ry = random.randint(0, size)
+        print(size)
+        
+        rx = randint(0, size - 1)
+        ry = randint(0, size - 1)
 
         self.map[rx][ry] = 1
 
         print("{}, {}".format(rx, ry))
+    
+    def show_map(self):
+        for i in range(len(self.map)):
+            for x in range(len(self.map[0])):
+                print(self.map[i][x], " ", end="")
+            print()

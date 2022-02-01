@@ -13,7 +13,6 @@ from IABrain import Brain
 class piskvorkProtocol(Brain):
 
     def __init__(self):
-        print("I'm alive !!")
         self.brain = Brain()
 
     def cmdBegin(self):
@@ -26,9 +25,7 @@ class piskvorkProtocol(Brain):
 
     def cmdStart(self, size):
         print("OK - everything is good")
-        self.brain.map = [[0] * int(size)] * int(size)
-        for i in self.brain.map:
-            print(i)
+        self.brain.map = [[0 for _ in range(int(size))] for _ in range(int(size))]
 
 
     def cmdAbout(self):
@@ -40,20 +37,23 @@ class piskvorkProtocol(Brain):
 
 
     def cmdTurn(self, x, y):
+        print(x, y)
         self.brain.map[int(x)][int(y)] = 2
-        self.brain.computeSolution(self)
+        self.brain.computeSolution()
     
     def cmdBoard(self):
+        print("test")
         for line in sys.stdin:
             line = line.rstrip("\n")
-            coor = re.findall(r"[\w']+", line)
-
-            self.brain.map[coor[0]][coor[1]] = coor[2]
-
             if line == "DONE":
+                print("soirt")
                 break
 
+            coor = re.findall(r"[\w']+", line)
+            self.brain.map[int(coor[0])][int(coor[1])] = int(coor[2])
+        print("lol")
         self.brain.computeSolution()
+        print("aiiiiiie")
 
 
     piskvorkCmd = {
@@ -67,7 +67,6 @@ class piskvorkProtocol(Brain):
 
     def processingData(self, cmd : str) -> None:
         list = re.findall(r"[\w']+", cmd)
-        print(list)
         args = list[1:]
         args.insert(0, self)
         self.piskvorkCmd[list[0]](*args)
