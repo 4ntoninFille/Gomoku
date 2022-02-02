@@ -21,6 +21,8 @@ def main():
     myIa = piskvorkProtocol()
     for line in sys.stdin:
         line = line.rstrip("\n")
+        if line == "END":
+            break
         try:
             myIa.processingData(line)
         except:
