@@ -7,6 +7,7 @@
 ##
 
 from code import interact
+from distutils.log import INFO
 import re
 import sys
 from tkinter.messagebox import NO
@@ -27,9 +28,9 @@ class piskvorkProtocol(Brain):
 
     def cmdStart(self, size):
         if int(size) > 20:
-            print("ERROR too_big", end="\r\n")
+            print("ERROR too_big", end = "\r\n", flush = True)
         self.brain.map = [[0 for _ in range(int(size))] for _ in range(int(size))]
-        print("OK", end="\r\n")
+        print("OK", end = "\r\n", flush = True)
 
 
     def cmdAbout(self):
@@ -37,7 +38,7 @@ class piskvorkProtocol(Brain):
             .format(self.brain.iaName,
                     self.brain.version,
                     self.brain.author,
-                    self.brain.country), end="\r\n")
+                    self.brain.country), end = "\r\n", flush = True)
 
 
     def cmdTurn(self, x, y):
@@ -54,7 +55,7 @@ class piskvorkProtocol(Brain):
             self.brain.map[int(coor[0])][int(coor[1])] = int(coor[2])
         self.brain.computeSolution()
     
-    def cmdInfo() -> None:
+    def cmdInfo(self, list) -> None:
         return None
 
     piskvorkCmd = {
@@ -71,4 +72,6 @@ class piskvorkProtocol(Brain):
         list = re.findall(r"[\w']+", cmd)
         args = list[1:]
         args.insert(0, self)
+        if list[0] == "INFO":
+            return
         self.piskvorkCmd[list[0]](*args)

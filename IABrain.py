@@ -7,6 +7,7 @@
 ##
 
 from random import randint
+import sys
 
 class Brain:
     def __init__(self) -> None:
@@ -24,7 +25,7 @@ class Brain:
 
         self.map[rx][ry] = 1
 
-        print("{},{}".format(rx, ry), end="\r\n")
+        print("{},{}".format(rx, ry), end = "\r\n")
     
     def show_map(self):
         for i in range(len(self.map)):
