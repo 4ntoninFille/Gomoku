@@ -11,12 +11,6 @@ import sys
 
 from pisvorkProtocol import piskvorkProtocol
 
-def coucou():
-    print("coucou")
-
-def aurevoir():
-    print("aurevoir")
-
 def main():
     myIa = piskvorkProtocol()
     for line in sys.stdin:
@@ -26,7 +20,8 @@ def main():
         try:
             myIa.processingData(line)
         except:
-            print("command invalid:", sys.exc_info()[0])
+            # print("command invalid:", sys.exc_info()[0])
+            print("UNKNOWN", end="\r\n")
         
     return 0
 

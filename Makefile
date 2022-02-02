@@ -15,7 +15,7 @@ $(NAME):
 	cp main.py $(NAME)
 	chmod +x $(NAME)
 
-buildpy:
+buildpy: fclean
 	pyinstaller --onefile main.py --name $(NAME)
 	cp dist/$(NAME) ./
 

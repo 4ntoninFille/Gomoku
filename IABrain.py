@@ -10,7 +10,6 @@ from random import randint
 
 class Brain:
     def __init__(self) -> None:
-        print("MESSAGE I'm alive !!")
         self.iaName = "Randodo"
         self.version = "0.0.1"
         self.author = "4nton1n_l3_bo22"
@@ -25,7 +24,7 @@ class Brain:
 
         self.map[rx][ry] = 1
 
-        print("{}, {}".format(rx, ry))
+        print("{},{}".format(rx, ry), end="\r\n")
     
     def show_map(self):
         for i in range(len(self.map)):
