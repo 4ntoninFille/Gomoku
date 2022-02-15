@@ -19,7 +19,7 @@ class piskvorkProtocol(Brain):
         self.brain = Brain()
 
     def cmdBegin(self):
-        self.brain.computeSolution();
+        self.brain.computeSolution(True);
 
 
     def cmdEnd(self):
@@ -43,7 +43,7 @@ class piskvorkProtocol(Brain):
 
     def cmdTurn(self, x, y):
         self.brain.map[int(x)][int(y)] = 2
-        self.brain.computeSolution()
+        self.brain.computeSolution(False)
     
     def cmdBoard(self):
         for line in sys.stdin:
@@ -53,7 +53,7 @@ class piskvorkProtocol(Brain):
 
             coor = re.findall(r"[\w']+", line)
             self.brain.map[int(coor[0])][int(coor[1])] = int(coor[2])
-        self.brain.computeSolution()
+        self.brain.computeSolution(False)
     
     def cmdInfo(self, list) -> None:
         return None
