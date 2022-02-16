@@ -29,6 +29,10 @@ class Brain:
         self.author = "4nton1n_l3_bo22"
         self.country = "FRANCE"
         self.map = []
+        self.size = 0
+
+    def putPiece(self, x, y, v):
+        index : int = x * y
 
     def computeSolution(self, begin : bool) -> None:
         size = len(self.map[0])

@@ -29,6 +29,7 @@ class piskvorkProtocol(Brain):
     def cmdStart(self, size):
         if int(size) > 20:
             print("ERROR too_big", end = "\r\n", flush = True)
+        self.brain.size = size
         self.brain.map = [[0 for _ in range(int(size))] for _ in range(int(size))]
         print("OK", end = "\r\n", flush = True)
 
