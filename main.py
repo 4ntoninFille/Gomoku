@@ -17,11 +17,11 @@ def main():
         line = line.rstrip("\n")
         if line == "END":
             break
-        try:
-            myIa.processingData(line)
-        except:
+        # try:
+        myIa.processingData(line)
+        # except:
             # print("command invalid:", sys.exc_info()[0])
-            print("UNKNOWN", end = "\r\n")
+            # print("UNKNOWN", end = "\r\n")
         sys.stdout.flush()
         
     return 0

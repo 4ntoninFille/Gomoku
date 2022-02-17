@@ -29,7 +29,7 @@ class piskvorkProtocol(Brain):
     def cmdStart(self, size):
         if int(size) > 20:
             print("ERROR too_big", end = "\r\n", flush = True)
-        self.brain.size = size
+        self.brain.size = int(size)
         self.brain.map = [[0 for _ in range(int(size))] for _ in range(int(size))]
         print("OK", end = "\r\n", flush = True)
 
@@ -42,8 +42,8 @@ class piskvorkProtocol(Brain):
                     self.brain.country), end = "\r\n", flush = True)
 
 
-    def cmdTurn(self, x, y):
-        self.brain.map[int(x)][int(y)] = 2
+    def cmdTurn(self, x : int, y : int):
+        self.brain.putPiece(x, y, False)
         self.brain.computeSolution(False)
     
     def cmdBoard(self):

@@ -20,6 +20,7 @@
 
 from hashlib import new
 from random import randint
+import math
 import sys
 
 class Brain:
@@ -29,27 +30,142 @@ class Brain:
         self.author = "4nton1n_l3_bo22"
         self.country = "FRANCE"
         self.map = []
-        self.size = 0
+        self.size : int = 0
 
-    def putPiece(self, x, y, v):
-        index : int = x * y
+        self.mapAllies = 0
+        self.mapEnemy = 0
+        self.mapFree : int = 0
+
+    #### Bits Function ####
+
+    def putPiece(self, x : int, y : int, allies : bool) -> None:
+        d = int(y) * self.size + int(x)
+        self.mapFree |= 1 << int(d)
+
+        if allies == True:
+            self.mapAllies |= (1 << int(d))
+        else:
+            self.mapEnemy |= (1 << int(d))
+
+    def setBitPiece(self, bits, index : int, value : int) -> int:
+        if value == 0:
+            bits &= ~(1<<int(index))
+        else:
+            bits |= (1 << int(index))
+        return bits
+
+    #######################
 
     def computeSolution(self, begin : bool) -> None:
-        size = len(self.map[0])
 
-        rx : int = randint(0, size - 1)
-        ry : int = randint(0, size - 1)
+        rx : int = randint(0, self.size - 1)
+        ry : int = randint(0, self.size - 1)
 
         if begin == True:
-            rx = ry = round(size / 2)
+            rx = ry = round(self.size / 2)
+        else:
+            index = self.minimax(0, self.mapFree, self.mapAllies, self.mapEnemy, True, 1, True)
 
-        self.map[rx][ry] = 1
+            ry = math.floor(index / self.size)
+            rx = index - self.size * ry
 
+
+        # self.map[rx][ry] = 1
+
+        self.putPiece(rx, ry, True)
+        # print(bin(self.mapFree))
         print("{},{}".format(rx, ry), end = "\r\n")
 
-    def minimax(self, newMap, turn : int, depth : int) -> int:
+    ## EVALUATION ##
+
+    def evaluation(self, pos : int, mapFree, mapAllies, mapEnemy) -> int:
+        valueEvaluation = 0
+        if int(pos) - 1 >= 0 and (int(mapAllies) >> int(pos) - 1) & 1:
+            valueEvaluation += 15
+        else:
+            valueEvaluation -= 15
+
+        if int(pos) + 1 < int(self.size * self.size) and (int(mapAllies) >> int(pos) + 1) & 1:
+            valueEvaluation += 15
+        else:
+            valueEvaluation -= 15
+        if int(pos) - int(self.size) >= 0 and (int(mapAllies) >> int(pos) - int(self.size)) & 1:
+            valueEvaluation += 15
+        else:
+            valueEvaluation -= 15
+        if int(pos) - int(self.size) >= int(self.size * self.size) and (int(mapAllies) >> int(pos) - int(self.size)) & 1:
+            valueEvaluation += 15
+        else:
+            valueEvaluation -= 15
+
+        if int(pos) - 1 >= 0 and (int(mapEnemy) >> int(pos) - 1) & 1:
+            valueEvaluation += 10
+        else:
+            valueEvaluation -= 10
+        if int(pos) + 1 < int(self.size * self.size) and (int(mapEnemy) >> int(pos) + 1) & 1:
+            valueEvaluation += 10
+        else:
+            valueEvaluation -= 10
+        if int(pos) - int(self.size) >= 0 and (int(mapEnemy) >> int(pos) - int(self.size)) & 1:
+            valueEvaluation += 10
+        else:
+            valueEvaluation -= 10
+        if int(pos) - int(self.size) >= int(self.size * self.size) and (int(mapEnemy) >> int(pos) - int(self.size)) & 1:
+            valueEvaluation += 10
+        else:
+            valueEvaluation -= 10    
+        
+        # print("eval=", valueEvaluation)
+        return valueEvaluation
+
+    ################
+
+    def minimax(self, pos : int, mapFree, mapAllies, mapEnemy, allies : bool, depth : int, first : bool) -> int:
         if depth <= 0:
-            return 0
+            return self.evaluation(pos, mapFree, mapAllies, mapEnemy)
+
+        if allies:
+            maxEval = -100000
+            tmpMax = -100000
+            bestIndex = 0
+            for index in range(self.size * self.size):
+                if ((int(mapFree) >> int(index)) & 1) == 0:
+                    mapFree = self.setBitPiece(mapFree, index, 1)
+                    mapAllies = self.setBitPiece(mapAllies, index, 1)
+
+                    eval = self.minimax(index, mapFree, mapAllies, mapEnemy, False, depth - 1, False)
+                    maxEval = max(maxEval, eval)
+
+                    mapFree = self.setBitPiece(mapFree, index, 0)
+                    mapAllies = self.setBitPiece(mapAllies, index, 0)
+                    if tmpMax != maxEval:
+                        bestIndex = index
+                        tmpMax = maxEval
+                    # if first:
+                    #     return bestIndex
+                    # else:
+            if first:
+                return bestIndex
+            else:
+                return maxEval
+        else:
+            minEval = 100000
+            for index in range (self.size * self.size):
+                if ((int(mapFree) >> int(index)) & 1) == 0:
+                    mapFree = self.setBitPiece(mapFree, index, 1)
+                    mapEnemy = self.setBitPiece(mapEnemy, index, 1)
+
+                    eval = self.minimax(index, mapFree, mapAllies, mapEnemy, True, depth - 1, True)
+                    minEval = min(minEval, eval)
+
+                    mapFree = self.setBitPiece(mapFree, index, 0)
+                    mapEnemy = self.setBitPiece(mapEnemy, index, 0)
+            return minEval
+
+        # for index in range(self.size * self.size):
+        #     if (mapFree >> index) & 0:
+        #         print()
+
             # evaluate position        
         # for x in range(len(newMap)):
         #     for y in range(len(newMap[0])):
