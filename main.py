@@ -13,7 +13,8 @@ from pisvorkProtocol import piskvorkProtocol
 
 def main():
     myIa = piskvorkProtocol()
-    for line in sys.stdin:
+    while True:
+        line = input()
         line = line.rstrip("\n")
         if line == "":
             break
