@@ -19,6 +19,7 @@
 # (x >> 16) & 0xf # get bits 16 through 20.
 
 from hashlib import new
+from logging.config import valid_ident
 from random import randint
 import math
 import sys
@@ -78,45 +79,85 @@ class Brain:
 
     ## EVALUATION ##
 
+    def evaluationAlignement(self, ind : int, off : int, m) -> int:
+        evalLine = 0
+        incr = 25
+
+        index = int(ind)
+        offset = int(off)
+        map = int(m)
+
+        for _ in range(5):
+            if index + offset >= 0 and index + offset < int(self.size * self.size):
+                if (map >> index + offset) & 1:
+                    evalLine += incr
+                    incr *= 2
+                else:
+                    return evalLine                
+                index += offset
+        
+        return evalLine
+
+
     def evaluation(self, pos : int, mapFree, mapAllies, mapEnemy) -> int:
-        valueEvaluation = 0
+        positionEvaluation = 0
         if int(pos) - 1 >= 0 and (int(mapAllies) >> int(pos) - 1) & 1:
-            valueEvaluation += 15
+            positionEvaluation += 15
         else:
-            valueEvaluation -= 15
+            positionEvaluation -= 15
 
         if int(pos) + 1 < int(self.size * self.size) and (int(mapAllies) >> int(pos) + 1) & 1:
-            valueEvaluation += 15
+            positionEvaluation += 15
         else:
-            valueEvaluation -= 15
+            positionEvaluation -= 15
         if int(pos) - int(self.size) >= 0 and (int(mapAllies) >> int(pos) - int(self.size)) & 1:
-            valueEvaluation += 15
+            positionEvaluation += 15
         else:
-            valueEvaluation -= 15
+            positionEvaluation -= 15
         if int(pos) - int(self.size) >= int(self.size * self.size) and (int(mapAllies) >> int(pos) - int(self.size)) & 1:
-            valueEvaluation += 15
+            positionEvaluation += 15
         else:
-            valueEvaluation -= 15
+            positionEvaluation -= 15
 
         if int(pos) - 1 >= 0 and (int(mapEnemy) >> int(pos) - 1) & 1:
-            valueEvaluation += 10
+            positionEvaluation += 10
         else:
-            valueEvaluation -= 10
+            positionEvaluation -= 10
         if int(pos) + 1 < int(self.size * self.size) and (int(mapEnemy) >> int(pos) + 1) & 1:
-            valueEvaluation += 10
+            positionEvaluation += 10
         else:
-            valueEvaluation -= 10
+            positionEvaluation -= 10
         if int(pos) - int(self.size) >= 0 and (int(mapEnemy) >> int(pos) - int(self.size)) & 1:
-            valueEvaluation += 10
+            positionEvaluation += 10
         else:
-            valueEvaluation -= 10
+            positionEvaluation -= 10
         if int(pos) - int(self.size) >= int(self.size * self.size) and (int(mapEnemy) >> int(pos) - int(self.size)) & 1:
-            valueEvaluation += 10
+            positionEvaluation += 10
         else:
-            valueEvaluation -= 10    
-        
-        # print("eval=", valueEvaluation)
-        return valueEvaluation
+            positionEvaluation -= 10
+
+        positionEvaluation += self.evaluationAlignement(pos, -1, mapAllies)
+        positionEvaluation += self.evaluationAlignement(pos, 1, mapAllies)
+        positionEvaluation += self.evaluationAlignement(pos, -self.size, mapAllies)
+        positionEvaluation += self.evaluationAlignement(pos, self.size, mapAllies)
+
+        positionEvaluation += self.evaluationAlignement(pos, -1 + self.size, mapAllies)
+        positionEvaluation += self.evaluationAlignement(pos, 1 + self.size, mapAllies)
+        positionEvaluation += self.evaluationAlignement(pos, -1 - self.size, mapAllies)
+        positionEvaluation += self.evaluationAlignement(pos, 1 - self.size, mapAllies)
+
+        positionEvaluation += self.evaluationAlignement(pos, -1, mapEnemy)
+        positionEvaluation += self.evaluationAlignement(pos, 1, mapEnemy)
+        positionEvaluation += self.evaluationAlignement(pos, -self.size, mapEnemy)
+        positionEvaluation += self.evaluationAlignement(pos, self.size, mapEnemy)
+
+        positionEvaluation += self.evaluationAlignement(pos, -1 + self.size, mapEnemy)
+        positionEvaluation += self.evaluationAlignement(pos, 1 + self.size, mapEnemy)
+        positionEvaluation += self.evaluationAlignement(pos, -1 - self.size, mapEnemy)
+        positionEvaluation += self.evaluationAlignement(pos, 1 - self.size, mapEnemy)
+
+        # print("eval=", positionEvaluation)
+        return positionEvaluation
 
     ################
 
@@ -141,9 +182,6 @@ class Brain:
                     if tmpMax != maxEval:
                         bestIndex = index
                         tmpMax = maxEval
-                    # if first:
-                    #     return bestIndex
-                    # else:
             if first:
                 return bestIndex
             else:
