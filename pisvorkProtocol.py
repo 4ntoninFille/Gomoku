@@ -10,7 +10,6 @@ from code import interact
 from distutils.log import INFO
 import re
 import sys
-from tkinter.messagebox import NO
 from IABrain import Brain
 
 class piskvorkProtocol(Brain):

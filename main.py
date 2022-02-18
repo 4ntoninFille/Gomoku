@@ -13,7 +13,9 @@ from pisvorkProtocol import piskvorkProtocol
 
 def main():
     myIa = piskvorkProtocol()
-    while True:
+
+    line = ""
+    while (line != "END"):
         line = input()
         if not line:
             break
@@ -25,7 +27,7 @@ def main():
         # except:
             # print("command invalid:", sys.exc_info()[0])
             # print("UNKNOWN", end = "\r\n")
-        
+
     return 0
 
 if __name__ == "__main__":
