@@ -65,7 +65,7 @@ class Brain:
         if begin == True:
             rx = ry = round(self.size / 2)
         else:
-            index = self.minimax(0, self.mapFree, self.mapAllies, self.mapEnemy, True, 1, True)
+            index = self.minimax(0, self.mapFree, self.mapAllies, self.mapEnemy, -1000000, 1000000, True, 1, True)
 
             ry = math.floor(index / self.size)
             rx = index - self.size * ry
@@ -101,40 +101,6 @@ class Brain:
 
     def evaluation(self, pos : int, mapFree, mapAllies, mapEnemy) -> int:
         positionEvaluation = 0
-        if int(pos) - 1 >= 0 and (int(mapAllies) >> int(pos) - 1) & 1:
-            positionEvaluation += 15
-        else:
-            positionEvaluation -= 15
-
-        if int(pos) + 1 < int(self.size * self.size) and (int(mapAllies) >> int(pos) + 1) & 1:
-            positionEvaluation += 15
-        else:
-            positionEvaluation -= 15
-        if int(pos) - int(self.size) >= 0 and (int(mapAllies) >> int(pos) - int(self.size)) & 1:
-            positionEvaluation += 15
-        else:
-            positionEvaluation -= 15
-        if int(pos) - int(self.size) >= int(self.size * self.size) and (int(mapAllies) >> int(pos) - int(self.size)) & 1:
-            positionEvaluation += 15
-        else:
-            positionEvaluation -= 15
-
-        if int(pos) - 1 >= 0 and (int(mapEnemy) >> int(pos) - 1) & 1:
-            positionEvaluation += 10
-        else:
-            positionEvaluation -= 10
-        if int(pos) + 1 < int(self.size * self.size) and (int(mapEnemy) >> int(pos) + 1) & 1:
-            positionEvaluation += 10
-        else:
-            positionEvaluation -= 10
-        if int(pos) - int(self.size) >= 0 and (int(mapEnemy) >> int(pos) - int(self.size)) & 1:
-            positionEvaluation += 10
-        else:
-            positionEvaluation -= 10
-        if int(pos) - int(self.size) >= int(self.size * self.size) and (int(mapEnemy) >> int(pos) - int(self.size)) & 1:
-            positionEvaluation += 10
-        else:
-            positionEvaluation -= 10
 
         positionEvaluation += self.evaluationAlignement(pos, -1, mapAllies)
         positionEvaluation += self.evaluationAlignement(pos, 1, mapAllies)
@@ -161,7 +127,7 @@ class Brain:
 
     ################
 
-    def minimax(self, pos : int, mapFree, mapAllies, mapEnemy, allies : bool, depth : int, first : bool) -> int:
+    def minimax(self, pos : int, mapFree, mapAllies, mapEnemy, alpha, beta, allies : bool, depth : int, first : bool) -> int:
         if depth <= 0:
             return self.evaluation(pos, mapFree, mapAllies, mapEnemy)
 
@@ -174,14 +140,20 @@ class Brain:
                     mapFree = self.setBitPiece(mapFree, index, 1)
                     mapAllies = self.setBitPiece(mapAllies, index, 1)
 
-                    eval = self.minimax(index, mapFree, mapAllies, mapEnemy, False, depth - 1, False)
+                    eval = self.minimax(index, mapFree, mapAllies, mapEnemy, alpha, beta, False, depth - 1, False)
                     maxEval = max(maxEval, eval)
+                    alpha = max(alpha, eval)
 
                     mapFree = self.setBitPiece(mapFree, index, 0)
                     mapAllies = self.setBitPiece(mapAllies, index, 0)
                     if tmpMax != maxEval:
                         bestIndex = index
                         tmpMax = maxEval
+                    
+                    if beta <= alpha:
+                        print("fils de pute")
+                        break
+
             if first:
                 return bestIndex
             else:
@@ -193,30 +165,17 @@ class Brain:
                     mapFree = self.setBitPiece(mapFree, index, 1)
                     mapEnemy = self.setBitPiece(mapEnemy, index, 1)
 
-                    eval = self.minimax(index, mapFree, mapAllies, mapEnemy, True, depth - 1, True)
+                    eval = self.minimax(index, mapFree, mapAllies, mapEnemy, alpha, beta, True, depth - 1, True)
                     minEval = min(minEval, eval)
+                    beta = min(beta, eval)
 
                     mapFree = self.setBitPiece(mapFree, index, 0)
                     mapEnemy = self.setBitPiece(mapEnemy, index, 0)
+
+                    if beta <= alpha:
+                        print("loool")
+                        break
             return minEval
-
-        # for index in range(self.size * self.size):
-        #     if (mapFree >> index) & 0:
-        #         print()
-
-            # evaluate position        
-        # for x in range(len(newMap)):
-        #     for y in range(len(newMap[0])):
-        #         if newMap[x][y] == 0:
-        #             if turn == 1:
-        #                 newMap[x][y] = 1
-        #             else:
-        #                 newMap[x][y] = 2
-        #         if depth <= 0:
-        #             return
-        #         self.newBoardRec(newMap, turn * -1, depth - 1)
-
-        return 1
 
     
     def show_map(self):

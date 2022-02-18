@@ -30,7 +30,6 @@ class piskvorkProtocol(Brain):
         if int(size) > 20:
             print("ERROR too_big", end = "\r\n", flush = True)
         self.brain.size = int(size)
-        self.brain.map = [[0 for _ in range(int(size))] for _ in range(int(size))]
         print("OK", end = "\r\n", flush = True)
 
 
@@ -53,7 +52,7 @@ class piskvorkProtocol(Brain):
                 break
 
             coor = re.findall(r"[\w']+", line)
-            self.brain.map[int(coor[0])][int(coor[1])] = int(coor[2])
+            self.brain.putPiece(int(coor[0]), int(coor[1]), True if int(coor[2]) == 1 else False)
         self.brain.computeSolution(False)
     
     def cmdInfo(self, list) -> None:
