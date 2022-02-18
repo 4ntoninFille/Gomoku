@@ -75,7 +75,7 @@ class Brain:
 
         self.putPiece(rx, ry, True)
         # print(bin(self.mapFree))
-        print("{},{}".format(rx, ry), end = "\r\n")
+        print("{},{}".format(rx, ry), end = "\r\n", flush=True)
 
     ## EVALUATION ##
 
@@ -151,7 +151,6 @@ class Brain:
                         tmpMax = maxEval
                     
                     if beta <= alpha:
-                        print("fils de pute")
                         break
 
             if first:
@@ -173,7 +172,6 @@ class Brain:
                     mapEnemy = self.setBitPiece(mapEnemy, index, 0)
 
                     if beta <= alpha:
-                        print("loool")
                         break
             return minEval
 

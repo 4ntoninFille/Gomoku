@@ -25,7 +25,6 @@ def main():
         # except:
             # print("command invalid:", sys.exc_info()[0])
             # print("UNKNOWN", end = "\r\n")
-        sys.stdout.flush()
         
     return 0
 
