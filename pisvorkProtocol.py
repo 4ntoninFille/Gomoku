@@ -28,6 +28,10 @@ class piskvorkProtocol(Brain):
     def cmdStart(self, size):
         if int(size) > 20:
             print("ERROR too_big", end = "\r\n", flush = True)
+            exit(84)
+        if int(size) < 5:
+            print("ERROR too_small", end = "\r\n", flush = True)
+            exit(84)
         self.brain.size = int(size)
         print("OK", end = "\r\n", flush = True)
 
