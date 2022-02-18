@@ -23,7 +23,7 @@ class piskvorkProtocol(Brain):
 
 
     def cmdEnd(self):
-        print("end")
+        return
 
 
     def cmdStart(self, size):
