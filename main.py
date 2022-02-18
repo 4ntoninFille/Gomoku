@@ -15,6 +15,8 @@ def main():
     myIa = piskvorkProtocol()
     for line in sys.stdin:
         line = line.rstrip("\n")
+        if line == "":
+            break
         if line == "END":
             break
         # try:
