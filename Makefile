@@ -5,18 +5,16 @@
 ## Makefile
 ##
 
-SRC			=	main.py
-
 NAME 	= 	pbrain-gomoku-ai
 
 all: $(NAME)
 
 $(NAME):
-	cp main.py $(NAME)
+	cp src/main.py $(NAME)
 	chmod +x $(NAME)
 
 buildpy: fclean
-	pyinstaller --onefile main.py --name $(NAME)
+	pyinstaller --onefile src/main.py --name $(NAME)
 	cp dist/$(NAME) ./
 
 clean:
